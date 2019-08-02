@@ -21,7 +21,7 @@ class ValidationRulesServiceProvider extends ServiceProvider
 
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__.'/../config/config.php' => config_path('validation-rules.php'),
+                __DIR__.'/../config/config.php' => config_path('me-validation-rules.php'),
             ], 'config');
 
             // Publishing the views.
@@ -36,11 +36,11 @@ class ValidationRulesServiceProvider extends ServiceProvider
 
             // Publishing the translation files.
             $this->publishes([
-                __DIR__.'/../resources/lang' => resource_path('lang/vendor/validation-rules'),
-            ], 'meValidationRules');
+                __DIR__.'/../resources/lang' => resource_path('lang/vendor/meValidationRules'),
+            ], 'lang');
 
-            // Load translations
-            $this->loadTranslationsFrom(__DIR__.'/../resources/lang/validation-rules', 'meValidationRules');
+            // Load translations.
+            $this->loadTranslationsFrom(__DIR__.'/../resources/lang/', 'meValidationRules');
 
             // Registering package commands.
             // $this->commands([]);
