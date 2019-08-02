@@ -39,6 +39,9 @@ class ValidationRulesServiceProvider extends ServiceProvider
                 __DIR__.'/../resources/lang' => resource_path('lang/vendor/validation-rules'),
             ], 'meValidationRules');
 
+            // Load translations
+            $this->loadTranslationsFrom(__DIR__.'/../resources/lang/validation-rules', 'meValidationRules');
+
             // Registering package commands.
             // $this->commands([]);
         }
