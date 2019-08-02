@@ -6,7 +6,7 @@ namespace Melhorenvio\ValidationRules\Rules;
 use Illuminate\Contracts\Validation\Rule;
 
 
-class Cnpj
+class Cnpj implements Rule
 {
     protected $invalidCnpjs;
 
