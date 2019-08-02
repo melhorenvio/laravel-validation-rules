@@ -1,0 +1,56 @@
+{
+    "name": "melhorenvio/laravel-validation-rules",
+    "description": "Regras básicas de validação para Laravel",
+    "keywords": [
+        "melhorenvio",
+        "validation-rules",
+        "laravel-validation-rules",
+        "laravel"
+    ],
+    "homepage": "https://github.com/melhorenvio/laravel-validation-rules",
+    "license": "MIT",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Melhor Envio",
+            "email": "tecnologia@melhorenvio.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^7.1",
+        "illuminate/support": "5.7.*"
+    },
+    "require-dev": {
+        "orchestra/testbench": "3.8.*",
+        "phpunit/phpunit": "^7.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Melhorenvio\\ValidationRules\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Melhorenvio\\ValidationRules\\Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit",
+        "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
+
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Melhorenvio\\ValidationRules\\ValidationRulesServiceProvider"
+            ],
+            "aliases": {
+                "ValidationRules": "Melhorenvio\\ValidationRules\\ValidationRulesFacade"
+            }
+        }
+    }
+}
