@@ -1,7 +1,8 @@
 # ME Laravel Validation Rules
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/melhorenvio/validation-rules.svg?style=flat-square)](https://packagist.org/packages/melhorenvio/validation-rules)
-[![Total Downloads](https://img.shields.io/packagist/dt/melhorenvio/validation-rules.svg?style=flat-square)](https://packagist.org/packages/melhorenvio/validation-rules)
+[![Latest Stable Version](https://poser.pugx.org/melhorenvio/laravel-validation-rules/v/stable)](https://packagist.org/packages/melhorenvio/laravel-validation-rules)
+[![Total Downloads](https://poser.pugx.org/melhorenvio/laravel-validation-rules/downloads)](https://packagist.org/packages/melhorenvio/laravel-validation-rules)
+
 
 Regras básicas de validação para Laravel. Atualmente temos as seguintes validações implementadas:
 
