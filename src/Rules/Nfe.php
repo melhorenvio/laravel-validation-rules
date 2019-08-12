@@ -8,13 +8,22 @@ use Illuminate\Contracts\Validation\Rule;
 
 class Nfe
 {
+    public $allowMask;
+
+    public function __construct($allowMask = false)
+    {
+        $this->allowMask = $allowMask;
+    }
+
     public function passes($attribute, $value): bool
     {
         if (!$value) {
             return true;
         }
 
-        $value = preg_replace('/\D/', '', $value);
+        if ($this->allowMask) {
+            $value = preg_replace('/\D/', '', $value);
+        }
 
         if (!($value && mb_strlen($value) === 44) || mb_substr($value, 0, 2) === '00') {
             return false;

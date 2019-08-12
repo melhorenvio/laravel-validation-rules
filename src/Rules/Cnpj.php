@@ -10,8 +10,12 @@ class Cnpj implements Rule
 {
     protected $invalidCnpjs;
 
-    public function __construct()
+    public $allowMask;
+
+    public function __construct($allowMask = true)
     {
+        $this->allowMask = $allowMask;
+
         $this->invalidCnpjs = [
             '00000000000000',
             '11111111111111',
@@ -32,7 +36,9 @@ class Cnpj implements Rule
             return true;
         }
 
-        $value = preg_replace('/\D/', '', $value);
+        if ($this->allowMask) {
+            $value = preg_replace('/\D/', '', $value);
+        }
 
         if (!($value && mb_strlen($value) === 14)) {
             return false;

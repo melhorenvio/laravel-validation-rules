@@ -10,8 +10,12 @@ class Cpf implements Rule
 {
     protected $invalidCpfs;
 
-    public function __construct()
+    public $allowMask;
+
+    public function __construct($allowMask = true)
     {
+        $this->allowMask = $allowMask;
+
         $this->invalidCpfs = [
             '00000000000',
             '11111111111',
@@ -32,7 +36,9 @@ class Cpf implements Rule
             return true;
         }
 
-        $value = preg_replace('/\D/', '', $value);
+        if ($this->allowMask) {
+            $value = preg_replace('/\D/', '', $value);
+        }
 
         if (!($value && mb_strlen($value) === 11)) {
             return false;
