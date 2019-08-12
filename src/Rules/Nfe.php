@@ -10,7 +10,7 @@ class Nfe
 {
     public $allowMask;
 
-    public function __construct($allowMask = false)
+    public function __construct($allowMask = true)
     {
         $this->allowMask = $allowMask;
     }
