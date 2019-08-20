@@ -6,7 +6,7 @@ namespace Melhorenvio\ValidationRules\Rules;
 use Illuminate\Contracts\Validation\Rule;
 
 
-class Nfe
+class Nfe implements Rule
 {
     public $allowMask;
 
