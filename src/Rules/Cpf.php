@@ -50,22 +50,22 @@ class Cpf implements Rule
         }
 
         for ($i = 0, $j = 10, $sum = 0; $i < 9; $i++, $j--) {
-            $sum += $value{$i} * $j;
+            $sum += $value[$i] * $j;
         }
 
         $mod = $sum % 11;
 
-        if ($value{9} != ($mod < 2 ? 0 : 11 - $mod)) {
+        if ($value[9] != ($mod < 2 ? 0 : 11 - $mod)) {
             return false;
         }
 
         for ($i = 0, $j = 11, $sum = 0; $i < 10; $i++, $j--) {
-            $sum += $value{$i} * $j;
+            $sum += $value[$i] * $j;
         }
 
         $mod = $sum % 11;
 
-        return $value{10} == ($mod < 2 ? 0 : 11 - $mod);
+        return $value[10] == ($mod < 2 ? 0 : 11 - $mod);
     }
 
     public function message(): string
