@@ -34,7 +34,7 @@ class Nfe implements Rule
         $weight = 2;
 
         for ($i = mb_strlen($value) - 2; $i >= 0; $i--) {
-            $sum += $value{$i} * $weight;
+            $sum += $value[$i] * $weight;
             $weight = $weight < 9 ? $weight + 1 : 2;
         }
 

@@ -49,24 +49,24 @@ class Cnpj implements Rule
         }
 
         for ($i = 0, $j = 5, $sum = 0; $i < 12; $i++) {
-            $sum += $value{$i} * $j;
+            $sum += $value[$i] * $j;
             $j = ($j == 2) ? 9 : $j - 1;
         }
 
         $mod = $sum % 11;
 
-        if ($value{12} != ($mod < 2 ? 0 : 11 - $mod)) {
+        if ($value[12] != ($mod < 2 ? 0 : 11 - $mod)) {
             return false;
         }
 
         for ($i = 0, $j = 6, $sum = 0; $i < 13; $i++) {
-            $sum += $value{$i} * $j;
+            $sum += $value[$i] * $j;
             $j = ($j == 2) ? 9 : $j - 1;
         }
 
         $mod = $sum % 11;
 
-        return $value{13} == ($mod < 2 ? 0 : 11 - $mod);
+        return $value[13] == ($mod < 2 ? 0 : 11 - $mod);
     }
 
     public function message(): string
