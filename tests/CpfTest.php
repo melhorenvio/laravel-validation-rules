@@ -37,6 +37,14 @@ class CpfTest extends TestCase
         $this->assertFalse($rule->passes('cpf', null));
     }
 
+    public function test_with_zeroed_cpf()
+    {
+        $rule = new Cpf();
+
+        $this->assertFalse($rule->passes('cpf', '0'));
+        $this->assertFalse($rule->passes('cpf', 0));
+    }
+
     public static function provideInvalidCpfs(): array
     {
         return [
@@ -59,7 +67,7 @@ class CpfTest extends TestCase
             ['666.666.666-66'],
             ['777.777.777-77'],
             ['888.888.888-88'],
-            ['999.999.999-99'],
+            ['999.999.999-99']
         ];
     }
 
