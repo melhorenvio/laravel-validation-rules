@@ -34,7 +34,7 @@ jobs:
             -   name: install dependencies
                 run: composer update --prefer-dist --no-progress --no-suggest --no-interaction ${{ matrix.composer-flags }}
 
-            -   run: composer test
+            -   run: composer ci:coverage
 
     phpunit-tests-pass:
         needs: [ phpunit-tests ]
@@ -52,6 +52,10 @@ jobs:
             - uses: actions/checkout@v3
               with:
                   fetch-depth: 0
+
+            - name: Get PHP coverage report paths
+              id: coverage
+              run: echo "reportPaths=$(find "$PWD/phpunit-reports" -type f | xargs echo | sed 's@'$GITHUB_WORKSPACE'@/github/workspace@g' | sed 's/ /,/g')" >> $GITHUB_OUTPUT
 
             - name: Analyze with SonarCloud
               uses: sonarsource/sonarcloud-github-action@master
