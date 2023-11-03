@@ -1,0 +1,60 @@
+name: ci
+
+on:
+    pull_request:
+        types: [ opened, synchronize, ready_for_review, reopened ]
+
+jobs:
+    ###
+    phpunit-tests:
+        runs-on: ubuntu-latest
+        strategy:
+            fail-fast: false
+            matrix:
+                include:
+                    -   php-version: '8.1'
+                        laravel-version: '9.*'
+                    -   php-version: '8.1'
+                        laravel-version: '10.*'
+
+        steps:
+            -   uses: actions/checkout@v2
+
+            -   name: install PHP
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: ${{ matrix.php-version }}
+                    coverage: none
+
+            -   run: composer validate
+
+            -   name: require Laravel
+                run: composer require "laravel/framework:${{ matrix.laravel-version }}" --no-update
+
+            -   name: install dependencies
+                run: composer update --prefer-dist --no-progress --no-suggest --no-interaction ${{ matrix.composer-flags }}
+
+            -   run: composer test
+
+    phpunit-tests-pass:
+        needs: [ phpunit-tests ]
+        if: ${{ !cancelled() }}
+        name: 'PHPUnit - Tests and Coverage: PASS'
+        runs-on: ubuntu-latest
+        steps:
+            -   run: exit 0
+
+    sonarcloud:
+        needs: [ phpunit-tests-pass ]
+        if: ${{ always() && !cancelled() && github.event_name != 'merge_group' }}
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+              with:
+                  fetch-depth: 0
+
+            - name: Analyze with SonarCloud
+              uses: sonarsource/sonarcloud-github-action@master
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
