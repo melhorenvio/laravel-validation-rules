@@ -14,8 +14,6 @@ jobs:
                 include:
                     -   php-version: '8.1'
                         laravel-version: '9.*'
-                    -   php-version: '8.1'
-                        laravel-version: '10.*'
 
         steps:
             -   uses: actions/checkout@v2
@@ -24,7 +22,7 @@ jobs:
                 uses: shivammathur/setup-php@v2
                 with:
                     php-version: ${{ matrix.php-version }}
-                    coverage: none
+                    coverage: pcov
 
             -   run: composer validate
 
@@ -34,24 +32,30 @@ jobs:
             -   name: install dependencies
                 run: composer update --prefer-dist --no-progress --no-suggest --no-interaction ${{ matrix.composer-flags }}
 
-            -   run: composer test
+            -   run: composer ci:coverage
 
-    phpunit-tests-pass:
-        needs: [ phpunit-tests ]
-        if: ${{ !cancelled() }}
-        name: 'PHPUnit - Tests and Coverage: PASS'
-        runs-on: ubuntu-latest
-        steps:
-            -   run: exit 0
+            -   name: Fix coverage report paths
+                id: coverage
+                run: sed -i 's@'$GITHUB_WORKSPACE'@/github/workspace@g' phpunit-reports/phpunit.coverage.xml
+
+            -   name: Store test results and coverage report
+                uses: actions/upload-artifact@v3
+                if: always()
+                with:
+                    name: phpunit-reports
+                    path: phpunit-reports/*.xml
+                    retention-days: 1
 
     sonarcloud:
-        needs: [ phpunit-tests-pass ]
+        needs: [ phpunit-tests ]
         if: ${{ always() && !cancelled() && github.event_name != 'merge_group' }}
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v3
               with:
                   fetch-depth: 0
+
+            - uses: actions/download-artifact@v3
 
             - name: Analyze with SonarCloud
               uses: sonarsource/sonarcloud-github-action@master
