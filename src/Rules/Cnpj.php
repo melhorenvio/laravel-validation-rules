@@ -32,19 +32,11 @@ class Cnpj implements Rule
 
     public function passes($attribute, $value): bool
     {
-        if (empty($value)) {
-            return false;
-        }
-
         if ($this->allowMask) {
             $value = preg_replace('/\D/', '', $value);
         }
 
-        if (mb_strlen($value) !== 14) {
-            return false;
-        }
-
-        if (in_array($value, $this->invalidCnpjs)) {
+        if (empty($value) || mb_strlen($value) !== 14 || in_array($value, $this->invalidCnpjs)) {
             return false;
         }
 
