@@ -33,14 +33,14 @@ class Cnpj implements Rule
     public function passes($attribute, $value): bool
     {
         if (empty($value)) {
-            return true;
+            return false;
         }
 
         if ($this->allowMask) {
             $value = preg_replace('/\D/', '', $value);
         }
 
-        if (!($value && mb_strlen($value) === 14)) {
+        if (mb_strlen($value) !== 14) {
             return false;
         }
 
