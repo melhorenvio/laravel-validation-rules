@@ -6,7 +6,7 @@ on:
 
 jobs:
     ###
-    test:
+    phpunit-tests:
         runs-on: ubuntu-latest
         strategy:
             fail-fast: false
@@ -35,7 +35,18 @@ jobs:
                 run: composer update --prefer-dist --no-progress --no-suggest --no-interaction ${{ matrix.composer-flags }}
 
             -   run: composer test
+
+    phpunit-tests-pass:
+        needs: [ phpunit-tests ]
+        if: ${{ !cancelled() }}
+        name: 'PHPUnit - Tests and Coverage: PASS'
+        runs-on: ubuntu-latest
+        steps:
+            -   run: exit 0
+
     sonarcloud:
+        needs: [ phpunit-tests-pass ]
+        if: ${{ always() && !cancelled() && github.event_name != 'merge_group' }}
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v3
