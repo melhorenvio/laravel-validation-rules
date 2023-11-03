@@ -34,6 +34,9 @@ jobs:
 
             -   run: composer ci:coverage
 
+            -   name: Fix PHPUnit code paths
+                run: sed -i 's@'$GITHUB_WORKSPACE'@/github/workspace@g' phpunit-reports/phpunit.coverage.xml
+
             -   name: Store test results and coverage report
                 uses: actions/upload-artifact@v3
                 if: always()
@@ -53,15 +56,8 @@ jobs:
 
             - uses: actions/download-artifact@v3
 
-            - name: Get PHP coverage report paths
-              id: coverage
-              run: echo "reportPaths=$(find "$PWD/phpunit-reports" -type f | xargs echo | sed 's@'$GITHUB_WORKSPACE'@/github/workspace@g' | sed 's/ /,/g')" >> $GITHUB_OUTPUT
-
             - name: Analyze with SonarCloud
               uses: sonarsource/sonarcloud-github-action@master
-              with:
-                  args: >
-                      -Dsonar.php.coverage.reportPaths=${{ steps.coverage.outputs.reportPaths }}
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
                   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
