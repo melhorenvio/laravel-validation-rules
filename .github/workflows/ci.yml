@@ -14,8 +14,6 @@ jobs:
                 include:
                     -   php-version: '8.1'
                         laravel-version: '9.*'
-                    -   php-version: '8.1'
-                        laravel-version: '10.*'
 
         steps:
             -   uses: actions/checkout@v2
