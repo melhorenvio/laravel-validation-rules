@@ -36,16 +36,16 @@ jobs:
 
             -   run: composer ci:coverage
 
-    phpunit-tests-pass:
-        needs: [ phpunit-tests ]
-        if: ${{ !cancelled() }}
-        name: 'PHPUnit - Tests and Coverage: PASS'
-        runs-on: ubuntu-latest
-        steps:
-            -   run: exit 0
+            -   name: Store test results and coverage report
+                uses: actions/upload-artifact@v3
+                if: always()
+                with:
+                    name: phpunit-reports
+                    path: phpunit-reports/*.xml
+                    retention-days: 1
 
     sonarcloud:
-        needs: [ phpunit-tests-pass ]
+        needs: [ phpunit-tests ]
         if: ${{ always() && !cancelled() && github.event_name != 'merge_group' }}
         runs-on: ubuntu-latest
         steps:
@@ -53,9 +53,11 @@ jobs:
               with:
                   fetch-depth: 0
 
+            - uses: actions/download-artifact@v3
+
             - name: Get PHP coverage report paths
               id: coverage
-              run: echo "reportPaths=$(find "$PWD/phpunit-reports" -type f | xargs echo | sed 's@'$GITHUB_WORKSPACE'@/github/workspace@g' | sed 's/ /,/g')" >> $GITHUB_OUTPUT
+              run: sed -i 's@'$GITHUB_WORKSPACE'@/github/workspace@g' phpunit-reports/phpunit.coverage.xml
 
             - name: Analyze with SonarCloud
               uses: sonarsource/sonarcloud-github-action@master
