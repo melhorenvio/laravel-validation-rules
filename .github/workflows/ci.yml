@@ -6,6 +6,35 @@ on:
 
 jobs:
     ###
+    test:
+        runs-on: ubuntu-latest
+        strategy:
+            fail-fast: false
+            matrix:
+                include:
+                    -   php-version: '8.1'
+                        laravel-version: '9.*'
+                    -   php-version: '8.1'
+                        laravel-version: '10.*'
+
+        steps:
+            -   uses: actions/checkout@v2
+
+            -   name: install PHP
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: ${{ matrix.php-version }}
+                    coverage: none
+
+            -   run: composer validate
+
+            -   name: require Laravel
+                run: composer require "laravel/framework:${{ matrix.laravel-version }}" --no-update
+
+            -   name: install dependencies
+                run: composer update --prefer-dist --no-progress --no-suggest --no-interaction ${{ matrix.composer-flags }}
+
+            -   run: composer test
     sonarcloud:
         runs-on: ubuntu-latest
         steps:
